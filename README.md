@@ -18,6 +18,9 @@ docker-compose up --build -d
 ```
 2. Wait a few seconds for services to start, then run tests (locally):
 ```bash
+docker-compose exec app bash
+
+
 pytest tests/test_reservation.py -q
 ```
 3. Open API docs: http://localhost:8000/docs
