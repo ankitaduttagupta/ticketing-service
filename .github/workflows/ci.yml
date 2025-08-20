@@ -34,7 +34,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-asyncio httpx
+          pip install pytest pytest-asyncio httpx uvicorn
+
+      - name: Start FastAPI app
+        run: |
+          nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+          echo "Waiting for FastAPI to be ready..."
+          for i in {1..10}; do
+            if curl -s http://localhost:8000/health > /dev/null; then
+              echo "FastAPI is up!"
+              break
+            fi
+            echo "Waiting... ($i)"
+            sleep 2
+          done
 
       - name: Run tests
         run: pytest tests -q
